@@ -2,6 +2,8 @@ package com.instagram.service;
 
 import com.instagram.model.User;
 
+import java.util.List;
+
 public interface UserService {
 
     boolean signupUser(User user);
@@ -12,4 +14,5 @@ public interface UserService {
 
     User searchUserByEmail(String email);
 
+    List<User> getAllUsers();
 }

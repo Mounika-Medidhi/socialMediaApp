@@ -4,6 +4,8 @@ import com.instagram.dao.UserDAO;
 import com.instagram.dao.UserDAOImpl;
 import com.instagram.model.User;
 
+import java.util.List;
+
 public class UserServiceImpl implements UserService {
 
     private UserDAO userDAO;
@@ -84,6 +86,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+
+        return userDAO.getAllUsers();
     }
 
     private boolean isValidPassword(String password) {

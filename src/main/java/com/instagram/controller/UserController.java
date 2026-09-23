@@ -4,6 +4,8 @@ import com.instagram.model.User;
 import com.instagram.service.UserService;
 import com.instagram.service.UserServiceImpl;
 
+import java.util.List;
+
 public class UserController {
 
     private UserService userService;
@@ -26,5 +28,9 @@ public class UserController {
 
     public User searchUserByEmail(String email) {
         return userService.searchUserByEmail(email);
+    }
+
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 }

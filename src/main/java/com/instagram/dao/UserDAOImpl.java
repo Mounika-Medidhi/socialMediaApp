@@ -6,6 +6,8 @@ import com.instagram.util.JDBCUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
 
@@ -136,7 +138,8 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User searchUserByEmail(String email) {
 
-        String sql = "SELECT user_id, username, email, status, role, created_at, updated_at " +
+        String sql = "SELECT user_id, username, email, status, role, " +
+                "created_at, updated_at " +
                 "FROM users WHERE email = ?";
 
         try (Connection connection = JDBCUtil.getConnection();
@@ -183,8 +186,53 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public java.util.List<User> getAllUsers() {
-        return null;
+    public List<User> getAllUsers() {
+
+        String sql = "SELECT user_id, username, email, status, role, " +
+                "created_at, updated_at " +
+                "FROM users";
+
+        List<User> users = new ArrayList<>();
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                User user = new User();
+
+                user.setUser_id(resultSet.getInt("user_id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setEmail(resultSet.getString("email"));
+                user.setStatus(resultSet.getString("status"));
+                user.setRole(resultSet.getString("role"));
+
+                if (resultSet.getTimestamp("created_at") != null) {
+                    user.setCreated_at(
+                            resultSet.getTimestamp("created_at")
+                                    .toLocalDateTime()
+                    );
+                }
+
+                if (resultSet.getTimestamp("updated_at") != null) {
+                    user.setUpdated_at(
+                            resultSet.getTimestamp("updated_at")
+                                    .toLocalDateTime()
+                    );
+                }
+
+                users.add(user);
+            }
+
+            return users;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return users;
+        }
     }
 
     @Override
