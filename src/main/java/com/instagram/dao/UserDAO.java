@@ -12,7 +12,7 @@ public interface UserDAO {
 
     User searchUserByUsername(String username);
 
-    User getUserByEmail(String email);
+    User searchUserByEmail(String email);
 
     List<User> getAllUsers();
 

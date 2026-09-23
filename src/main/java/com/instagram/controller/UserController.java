@@ -19,4 +19,12 @@ public class UserController {
     public User searchUserById(int user_id) {
         return userService.searchUserById(user_id);
     }
+
+    public User searchUserByUsername(String username) {
+        return userService.searchUserByUsername(username);
+    }
+
+    public User searchUserByEmail(String email) {
+        return userService.searchUserByEmail(email);
+    }
 }

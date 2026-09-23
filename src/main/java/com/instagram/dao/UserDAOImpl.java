@@ -134,7 +134,51 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User searchUserByEmail(String email) {
+
+        String sql = "SELECT user_id, username, email, status, role, created_at, updated_at " +
+                "FROM users WHERE email = ?";
+
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+
+                User user = new User();
+
+                user.setUser_id(resultSet.getInt("user_id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setEmail(resultSet.getString("email"));
+                user.setStatus(resultSet.getString("status"));
+                user.setRole(resultSet.getString("role"));
+
+                if (resultSet.getTimestamp("created_at") != null) {
+                    user.setCreated_at(
+                            resultSet.getTimestamp("created_at")
+                                    .toLocalDateTime()
+                    );
+                }
+
+                if (resultSet.getTimestamp("updated_at") != null) {
+                    user.setUpdated_at(
+                            resultSet.getTimestamp("updated_at")
+                                    .toLocalDateTime()
+                    );
+                }
+
+                return user;
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
         return null;
     }
 

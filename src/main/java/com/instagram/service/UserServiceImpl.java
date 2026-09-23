@@ -40,13 +40,13 @@ public class UserServiceImpl implements UserService {
     public User searchUserById(int user_id) {
 
         if (user_id <= 0) {
-            return null;
+            throw new IllegalArgumentException("Invalid user ID");
         }
 
         User user = userDAO.searchUserById(user_id);
 
         if (user == null) {
-            return null;
+            throw new IllegalArgumentException("User not found");
         }
 
         return user;
@@ -55,12 +55,37 @@ public class UserServiceImpl implements UserService {
     @Override
     public User searchUserByUsername(String username) {
 
-        if (username == null || username.trim().isEmpty()) {
-            return null;
+        if (username == null ||
+                username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty");
         }
 
-        return userDAO.searchUserByUsername(username);
+        User user = userDAO.searchUserByUsername(username);
+
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        return user;
     }
+
+    @Override
+    public User searchUserByEmail(String email) {
+
+        if (email == null ||
+                email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be empty");
+        }
+
+        User user = userDAO.searchUserByEmail(email);
+
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        return user;
+    }
+
     private boolean isValidPassword(String password) {
 
         if (password == null || password.length() < 8) {

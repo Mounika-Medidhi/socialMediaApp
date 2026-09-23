@@ -10,4 +10,6 @@ public interface UserService {
 
     User searchUserByUsername(String username);
 
+    User searchUserByEmail(String email);
+
 }
