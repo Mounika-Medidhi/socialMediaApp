@@ -15,4 +15,10 @@ public interface UserService {
     User searchUserByEmail(String email);
 
     List<User> getAllUsers();
+
+    boolean updateUser(User user);
+
+    boolean deleteUser(String username, String password);
+
+
 }
