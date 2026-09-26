@@ -12,9 +12,11 @@ public class Comment {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
+    // Default constructor
     public Comment() {
     }
 
+    // Parameterized constructor
     public Comment(int comment_id,
                    User user,
                    Post post,
@@ -31,6 +33,8 @@ public class Comment {
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
+
+    // Getters and Setters
 
     public int getComment_id() {
         return comment_id;
