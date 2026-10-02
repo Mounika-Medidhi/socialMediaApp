@@ -3,6 +3,7 @@ package com.instagram.service;
 import com.instagram.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -20,5 +21,10 @@ public interface UserService {
 
     boolean deleteUser(String username, String password);
 
+    // Admin operations
+    boolean createAdmin(User user);
 
+    int countTotalUsers();
+
+    Map<String, Integer> countUsersByStatus();
 }

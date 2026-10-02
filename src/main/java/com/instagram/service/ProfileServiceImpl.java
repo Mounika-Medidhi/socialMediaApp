@@ -19,6 +19,11 @@ public class ProfileServiceImpl implements ProfileService {
         profileDAO = new ProfileDAOimpl();
     }
 
+    // Constructor used for JUnit + Mockito testing
+    public ProfileServiceImpl(ProfileDAO profileDAO) {
+        this.profileDAO = profileDAO;
+    }
+
     @Override
     public boolean createProfile(Profile profile) {
 
@@ -45,6 +50,46 @@ public class ProfileServiceImpl implements ProfileService {
             logger.warn(
                     "Profile creation failed: invalid user_id={}",
                     profile.getUser().getUser_id()
+            );
+
+            return false;
+        }
+
+        if (profile.getFull_name() == null ||
+                profile.getFull_name().trim().isEmpty()) {
+
+            logger.warn(
+                    "Profile creation failed: full name is empty"
+            );
+
+            return false;
+        }
+
+        if (profile.getBio() == null ||
+                profile.getBio().trim().isEmpty()) {
+
+            logger.warn(
+                    "Profile creation failed: bio is empty"
+            );
+
+            return false;
+        }
+
+        if (profile.getPhone() == null ||
+                profile.getPhone().trim().isEmpty()) {
+
+            logger.warn(
+                    "Profile creation failed: phone number is empty"
+            );
+
+            return false;
+        }
+
+        if (profile.getProfile_image_url() == null ||
+                profile.getProfile_image_url().trim().isEmpty()) {
+
+            logger.warn(
+                    "Profile creation failed: profile image URL is empty"
             );
 
             return false;
@@ -78,11 +123,6 @@ public class ProfileServiceImpl implements ProfileService {
 
             return null;
         }
-
-        logger.info(
-                "Profile found successfully for user_id={}",
-                user_id
-        );
 
         return profile;
     }
@@ -145,7 +185,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public boolean UpdateProfile(Profile profile) {
+    public boolean updateprofile(Profile profile) {
 
         if (profile == null) {
 
@@ -175,6 +215,46 @@ public class ProfileServiceImpl implements ProfileService {
             return false;
         }
 
-        return profileDAO.Updateprofile(profile);
+        if (profile.getFull_name() == null ||
+                profile.getFull_name().trim().isEmpty()) {
+
+            logger.warn(
+                    "Profile update failed: full name is empty"
+            );
+
+            return false;
+        }
+
+        if (profile.getBio() == null ||
+                profile.getBio().trim().isEmpty()) {
+
+            logger.warn(
+                    "Profile update failed: bio is empty"
+            );
+
+            return false;
+        }
+
+        if (profile.getPhone() == null ||
+                profile.getPhone().trim().isEmpty()) {
+
+            logger.warn(
+                    "Profile update failed: phone number is empty"
+            );
+
+            return false;
+        }
+
+        if (profile.getProfile_image_url() == null ||
+                profile.getProfile_image_url().trim().isEmpty()) {
+
+            logger.warn(
+                    "Profile update failed: profile image URL is empty"
+            );
+
+            return false;
+        }
+
+        return profileDAO.updateprofile(profile);
     }
 }

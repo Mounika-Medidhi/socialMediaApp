@@ -19,33 +19,45 @@ public class PostServiceImpl implements PostService {
         postDAO = new PostDAOImpl();
     }
 
+    // Constructor used for JUnit + Mockito testing
+    public PostServiceImpl(PostDAO postDAO) {
+        this.postDAO = postDAO;
+    }
+
+
     @Override
     public boolean createPost(Post post) {
 
         if (post == null) {
 
+            /*
             logger.warn(
                     "Post creation failed: post is null"
             );
+            */
 
             return false;
         }
 
         if (post.getUser() == null) {
 
+            /*
             logger.warn(
                     "Post creation failed: user is null"
             );
+            */
 
             return false;
         }
 
         if (post.getUser().getUser_id() <= 0) {
 
+            /*
             logger.warn(
                     "Post creation failed: invalid user_id={}",
                     post.getUser().getUser_id()
             );
+            */
 
             return false;
         }
@@ -60,9 +72,11 @@ public class PostServiceImpl implements PostService {
 
         if (captionEmpty && imageEmpty) {
 
+            /*
             logger.warn(
                     "Post creation failed: caption and image are both empty"
             );
+            */
 
             return false;
         }
@@ -77,9 +91,11 @@ public class PostServiceImpl implements PostService {
         if (username == null ||
                 username.trim().isEmpty()) {
 
+            /*
             logger.warn(
                     "Post search failed: username is empty"
             );
+            */
 
             return List.of();
         }
@@ -89,19 +105,15 @@ public class PostServiceImpl implements PostService {
 
         if (posts.isEmpty()) {
 
+            /*
             logger.warn(
                     "No posts found for username={}",
                     username
             );
+            */
 
             return posts;
         }
-
-        logger.info(
-                "Posts found successfully for username={}: count={}",
-                username,
-                posts.size()
-        );
 
         return posts;
     }
@@ -115,17 +127,14 @@ public class PostServiceImpl implements PostService {
 
         if (posts.isEmpty()) {
 
+            /*
             logger.warn(
                     "No posts found"
             );
+            */
 
             return posts;
         }
-
-        logger.info(
-                "Retrieved {} posts successfully",
-                posts.size()
-        );
 
         return posts;
     }
@@ -136,28 +145,34 @@ public class PostServiceImpl implements PostService {
 
         if (post == null) {
 
+            /*
             logger.warn(
                     "Post update failed: post is null"
             );
+            */
 
             return false;
         }
 
         if (post.getPost_id() <= 0) {
 
+            /*
             logger.warn(
                     "Post update failed: invalid post_id={}",
                     post.getPost_id()
             );
+            */
 
             return false;
         }
 
         if (post.getUser() == null) {
 
+            /*
             logger.warn(
                     "Post update failed: user is null"
             );
+            */
 
             return false;
         }
@@ -165,9 +180,11 @@ public class PostServiceImpl implements PostService {
         if (post.getUser().getUsername() == null ||
                 post.getUser().getUsername().trim().isEmpty()) {
 
+            /*
             logger.warn(
                     "Post update failed: username is empty"
             );
+            */
 
             return false;
         }
@@ -182,9 +199,11 @@ public class PostServiceImpl implements PostService {
 
         if (captionEmpty && imageEmpty) {
 
+            /*
             logger.warn(
                     "Post update failed: caption and image are both empty"
             );
+            */
 
             return false;
         }
@@ -198,10 +217,12 @@ public class PostServiceImpl implements PostService {
 
         if (post_id <= 0) {
 
+            /*
             logger.warn(
                     "Post deletion failed: invalid post_id={}",
                     post_id
             );
+            */
 
             return false;
         }
@@ -209,9 +230,11 @@ public class PostServiceImpl implements PostService {
         if (username == null ||
                 username.trim().isEmpty()) {
 
+            /*
             logger.warn(
                     "Post deletion failed: username is empty"
             );
+            */
 
             return false;
         }

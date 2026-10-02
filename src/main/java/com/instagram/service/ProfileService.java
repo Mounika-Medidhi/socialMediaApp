@@ -14,5 +14,5 @@ public interface ProfileService {
 
     List<Profile> findAllProfiles();
 
-    boolean UpdateProfile(Profile profile);
+    boolean updateprofile(Profile profile);
 }

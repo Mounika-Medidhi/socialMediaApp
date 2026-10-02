@@ -16,12 +16,15 @@ public class CommentServiceImpl implements CommentService {
 
     private CommentDAO commentDAO;
 
-
     public CommentServiceImpl() {
 
         commentDAO = new CommentDAOImpl();
     }
 
+    // Constructor used for JUnit + Mockito testing
+    public CommentServiceImpl(CommentDAO commentDAO) {
+        this.commentDAO = commentDAO;
+    }
 
     // CREATE COMMENT
     @Override
@@ -36,7 +39,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         if (comment.getPost() == null) {
 
             logger.warn(
@@ -45,7 +47,6 @@ public class CommentServiceImpl implements CommentService {
 
             return false;
         }
-
 
         if (comment.getPost().getPost_id() <= 0) {
 
@@ -57,7 +58,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         if (comment.getUser() == null) {
 
             logger.warn(
@@ -66,7 +66,6 @@ public class CommentServiceImpl implements CommentService {
 
             return false;
         }
-
 
         if (comment.getUser().getUser_id() <= 0) {
 
@@ -78,7 +77,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         if (comment.getComment_text() == null ||
                 comment.getComment_text().trim().isEmpty()) {
 
@@ -89,10 +87,8 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         boolean result =
                 commentDAO.createComment(comment);
-
 
         if (result) {
 
@@ -104,7 +100,6 @@ public class CommentServiceImpl implements CommentService {
 
         return result;
     }
-
 
     // FIND COMMENTS BY POST ID
     @Override
@@ -120,20 +115,11 @@ public class CommentServiceImpl implements CommentService {
             return List.of();
         }
 
-
         List<Comment> comments =
                 commentDAO.findCommentsByPostId(post_id);
 
-
-        logger.info(
-                "Retrieved {} comments for post_id={}",
-                comments.size(),
-                post_id
-        );
-
         return comments;
     }
-
 
     // UPDATE COMMENT
     @Override
@@ -148,7 +134,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         if (comment.getComment_id() <= 0) {
 
             logger.warn(
@@ -159,7 +144,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         if (comment.getUser() == null) {
 
             logger.warn(
@@ -168,7 +152,6 @@ public class CommentServiceImpl implements CommentService {
 
             return false;
         }
-
 
         if (comment.getUser().getUser_id() <= 0) {
 
@@ -180,7 +163,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         if (comment.getComment_text() == null ||
                 comment.getComment_text().trim().isEmpty()) {
 
@@ -191,10 +173,8 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         boolean result =
                 commentDAO.updateComment(comment);
-
 
         if (result) {
 
@@ -206,7 +186,6 @@ public class CommentServiceImpl implements CommentService {
 
         return result;
     }
-
 
     // DELETE COMMENT
     @Override
@@ -221,7 +200,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         if (comment.getComment_id() <= 0) {
 
             logger.warn(
@@ -232,7 +210,6 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         if (comment.getUser() == null) {
 
             logger.warn(
@@ -241,7 +218,6 @@ public class CommentServiceImpl implements CommentService {
 
             return false;
         }
-
 
         if (comment.getUser().getUser_id() <= 0) {
 
@@ -253,10 +229,8 @@ public class CommentServiceImpl implements CommentService {
             return false;
         }
 
-
         boolean result =
                 commentDAO.deleteComment(comment);
-
 
         if (result) {
 
