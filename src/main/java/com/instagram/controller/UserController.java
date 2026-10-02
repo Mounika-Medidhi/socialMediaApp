@@ -1,88 +1,107 @@
 package com.instagram.controller;
 
+import com.instagram.model.Profile;
 import com.instagram.model.User;
 import com.instagram.service.UserService;
 import com.instagram.service.UserServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class UserController {
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(UserController.class);
 
     private UserService userService;
 
     public UserController() {
         userService = new UserServiceImpl();
     }
+    // SIGNUP USER
+
 
     public boolean signupUser(User user) {
-
-        logger.info(
-                "Signup request received: username={}",
-                user.getUsername()
-        );
-
         return userService.signupUser(user);
     }
 
+
+    // SEARCH USER BY ID
+
     public User searchUserById(int user_id) {
-
-        logger.info(
-                "Search user request received: user_id={}",
-                user_id
-        );
-
         return userService.searchUserById(user_id);
     }
 
+
+    // ==========================================
+    // SEARCH USER BY USERNAME
+    // ==========================================
+
     public User searchUserByUsername(String username) {
-
-        logger.info(
-                "Search user request received: username={}",
-                username
-        );
-
         return userService.searchUserByUsername(username);
     }
 
+
+    // ==========================================
+    // SEARCH USER BY EMAIL
+    // ==========================================
+
     public User searchUserByEmail(String email) {
-
-        logger.info(
-                "Search user request received: email={}",
-                email
-        );
-
         return userService.searchUserByEmail(email);
     }
 
+
+    // ==========================================
+    // GET ALL USERS
+    // ==========================================
+
     public List<User> getAllUsers() {
-
-        logger.info("Get all users request received");
-
         return userService.getAllUsers();
     }
 
+
+    // ==========================================
+    // UPDATE USER
+    // ==========================================
+
     public boolean updateUser(User user) {
-
-        logger.info(
-                "Update user request received: user_id={}",
-                user.getUser_id()
-        );
-
         return userService.updateUser(user);
     }
 
-    public boolean deleteUser(String username, String password) {
 
-        logger.info(
-                "Delete user request received: username={}",
-                username
+    // ==========================================
+    // DELETE USER
+    // ==========================================
+
+    public boolean deleteUser(
+            String username,
+            String password) {
+
+        return userService.deleteUser(
+                username,
+                password
         );
+    }
 
-        return userService.deleteUser(username, password);
+    // ==========================================
+    // CREATE ADMIN
+    // ==========================================
+
+    public boolean createAdmin(User user) {
+        return userService.createAdmin(user);
+    }
+
+    // ==========================================
+    // COUNT TOTAL USERS
+    // ==========================================
+
+    public int countTotalUsers() {
+        return userService.countTotalUsers();
+    }
+
+    // ==========================================
+    // COUNT USERS BY STATUS
+    // ==========================================
+
+    public Map<String, Integer> countUsersByStatus() {
+        return userService.countUsersByStatus();
     }
 }
