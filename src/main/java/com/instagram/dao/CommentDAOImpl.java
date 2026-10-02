@@ -19,20 +19,19 @@ public class CommentDAOImpl implements CommentDAO {
     private static final Logger logger =
             LoggerFactory.getLogger(CommentDAOImpl.class);
 
-
     // SQL QUERY FOR CREATE COMMENT
     private static final String CREATE_COMMENT =
             "INSERT INTO comments " +
                     "(post_id, user_id, comment_text) " +
                     "VALUES (?, ?, ?)";
 
-
     // SQL QUERY FOR FINDING COMMENTS BY POST ID
     private static final String FIND_COMMENTS_BY_POST_ID =
-            "SELECT * FROM comments " +
-                    "WHERE post_id = ? " +
-                    "ORDER BY created_at";
-
+            "SELECT c.*, u.username " +
+                    "FROM comments c " +
+                    "JOIN users u ON c.user_id = u.user_id " +
+                    "WHERE c.post_id = ? " +
+                    "ORDER BY c.created_at";
 
     // SQL QUERY FOR UPDATE COMMENT
     private static final String UPDATE_COMMENT =
@@ -41,13 +40,11 @@ public class CommentDAOImpl implements CommentDAO {
                     "WHERE comment_id = ? " +
                     "AND user_id = ?";
 
-
     // SQL QUERY FOR DELETE COMMENT
     private static final String DELETE_COMMENT =
             "DELETE FROM comments " +
                     "WHERE comment_id = ? " +
                     "AND user_id = ?";
-
 
     // CREATE COMMENT
     @Override
@@ -101,7 +98,6 @@ public class CommentDAOImpl implements CommentDAO {
         return false;
     }
 
-
     // FIND COMMENTS BY POST ID
     @Override
     public List<Comment> findCommentsByPostId(int post_id) {
@@ -126,7 +122,6 @@ public class CommentDAOImpl implements CommentDAO {
                         resultSet.getInt("comment_id")
                 );
 
-
                 // Create Post object
                 Post post = new Post();
 
@@ -136,7 +131,6 @@ public class CommentDAOImpl implements CommentDAO {
 
                 comment.setPost(post);
 
-
                 // Create User object
                 User user = new User();
 
@@ -144,13 +138,16 @@ public class CommentDAOImpl implements CommentDAO {
                         resultSet.getInt("user_id")
                 );
 
-                comment.setUser(user);
+                // Get username from users table
+                user.setUsername(
+                        resultSet.getString("username")
+                );
 
+                comment.setUser(user);
 
                 comment.setComment_text(
                         resultSet.getString("comment_text")
                 );
-
 
                 if (resultSet.getTimestamp("created_at") != null) {
 
@@ -161,7 +158,6 @@ public class CommentDAOImpl implements CommentDAO {
                     );
                 }
 
-
                 if (resultSet.getTimestamp("updated_at") != null) {
 
                     comment.setUpdated_at(
@@ -171,15 +167,8 @@ public class CommentDAOImpl implements CommentDAO {
                     );
                 }
 
-
                 comments.add(comment);
             }
-
-            logger.info(
-                    "Retrieved {} comments for post_id={}",
-                    comments.size(),
-                    post_id
-            );
 
         } catch (Exception e) {
 
@@ -192,7 +181,6 @@ public class CommentDAOImpl implements CommentDAO {
 
         return comments;
     }
-
 
     // UPDATE COMMENT
     @Override
@@ -252,7 +240,6 @@ public class CommentDAOImpl implements CommentDAO {
 
         return false;
     }
-
 
     // DELETE COMMENT
     @Override

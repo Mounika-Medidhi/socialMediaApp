@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,18 +73,38 @@ public class ProfileDAOimpl implements ProfileDAO {
 
             if (rows > 0) {
 
+                /*
                 logger.info(
                         "Profile created successfully: user_id={}",
                         profile.getUser().getUser_id()
                 );
+                */
 
                 return true;
             }
 
+        } catch (SQLIntegrityConstraintViolationException e) {
+
+            /*
+             * This is a normal business case.
+             * The phone number is already present in the database.
+             * We do not print the SQL stack trace to the user.
+             */
+            logger.warn(
+                    "Profile creation failed: phone number already exists, user_id={}",
+                    profile.getUser().getUser_id()
+            );
+
+            return false;
+
         } catch (Exception e) {
 
+            /*
+             * Unexpected database/system errors are still logged
+             * as ERROR with the exception details.
+             */
             logger.error(
-                    "Error while creating profile: user_id={}",
+                    "Unexpected error while creating profile: user_id={}",
                     profile.getUser().getUser_id(),
                     e
             );
@@ -129,6 +150,7 @@ public class ProfileDAOimpl implements ProfileDAO {
                 );
 
                 if (resultSet.getTimestamp("updated_at") != null) {
+
                     profile.setUpdated_at(
                             resultSet.getTimestamp("updated_at")
                                     .toLocalDateTime()
@@ -187,6 +209,7 @@ public class ProfileDAOimpl implements ProfileDAO {
                 );
 
                 if (resultSet.getTimestamp("updated_at") != null) {
+
                     profile.setUpdated_at(
                             resultSet.getTimestamp("updated_at")
                                     .toLocalDateTime()
@@ -244,6 +267,7 @@ public class ProfileDAOimpl implements ProfileDAO {
                 );
 
                 if (resultSet.getTimestamp("updated_at") != null) {
+
                     profile.setUpdated_at(
                             resultSet.getTimestamp("updated_at")
                                     .toLocalDateTime()
@@ -253,10 +277,10 @@ public class ProfileDAOimpl implements ProfileDAO {
                 profiles.add(profile);
             }
 
-            logger.info(
+           /* logger.info(
                     "Retrieved {} profiles from database",
                     profiles.size()
-            );
+            );*/
 
         } catch (Exception e) {
 
@@ -271,7 +295,7 @@ public class ProfileDAOimpl implements ProfileDAO {
 
 
     @Override
-    public boolean Updateprofile(Profile profile) {
+    public boolean updateprofile(Profile profile) {
 
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement =
@@ -319,10 +343,17 @@ public class ProfileDAOimpl implements ProfileDAO {
                     profile.getUser().getUser_id()
             );
 
+        } catch (SQLIntegrityConstraintViolationException e) {
+
+            logger.warn(
+                    "Profile update failed: phone number already exists, user_id={}",
+                    profile.getUser().getUser_id()
+            );
+
         } catch (Exception e) {
 
             logger.error(
-                    "Error while updating profile: user_id={}",
+                    "Unexpected error while updating profile: user_id={}",
                     profile.getUser().getUser_id(),
                     e
             );

@@ -14,5 +14,6 @@ public interface ProfileDAO {
 
     List<Profile> findAllProfiles();
 
-    boolean Updateprofile(Profile profile);
+    boolean updateprofile(Profile profile);
+
 }

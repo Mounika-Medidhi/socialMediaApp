@@ -23,13 +23,15 @@ public class PostDAOImpl implements PostDAO {
                     "VALUES (?, ?, ?)";
 
     private static final String FIND_POSTS_BY_USERNAME =
-            "SELECT p.* " +
+            "SELECT p.*, u.username " +
                     "FROM posts p " +
                     "JOIN users u ON p.user_id = u.user_id " +
                     "WHERE u.username = ?";
 
     private static final String FIND_ALL_POSTS =
-            "SELECT * FROM posts";
+            "SELECT p.*, u.username " +
+                    "FROM posts p " +
+                    "JOIN users u ON p.user_id = u.user_id";
 
     private static final String UPDATE_POST =
             "UPDATE posts p " +
@@ -71,19 +73,15 @@ public class PostDAOImpl implements PostDAO {
             int rows = statement.executeUpdate();
 
             if (rows > 0) {
-
-                logger.info(
-                        "Post created successfully: user_id={}",
-                        post.getUser().getUser_id()
-                );
-
                 return true;
             }
 
+            /*
             logger.warn(
                     "Post creation failed: user_id={}",
                     post.getUser().getUser_id()
             );
+            */
 
         } catch (Exception e) {
 
@@ -125,6 +123,10 @@ public class PostDAOImpl implements PostDAO {
                         resultSet.getInt("user_id")
                 );
 
+                user.setUsername(
+                        resultSet.getString("username")
+                );
+
                 post.setUser(user);
 
                 post.setCaption(
@@ -157,12 +159,6 @@ public class PostDAOImpl implements PostDAO {
 
                 posts.add(post);
             }
-
-            logger.info(
-                    "Retrieved {} posts for username={}",
-                    posts.size(),
-                    username
-            );
 
         } catch (Exception e) {
 
@@ -195,10 +191,20 @@ public class PostDAOImpl implements PostDAO {
                         resultSet.getInt("post_id")
                 );
 
+                /*
+                 * Create the User object for the post owner.
+                 * This is required by CommentServiceImpl
+                 * to verify whether the logged-in user
+                 * is trying to comment on their own post.
+                 */
                 User user = new User();
 
                 user.setUser_id(
                         resultSet.getInt("user_id")
+                );
+
+                user.setUsername(
+                        resultSet.getString("username")
                 );
 
                 post.setUser(user);
@@ -233,11 +239,6 @@ public class PostDAOImpl implements PostDAO {
 
                 posts.add(post);
             }
-
-            logger.info(
-                    "Retrieved {} posts successfully",
-                    posts.size()
-            );
 
         } catch (Exception e) {
 
@@ -281,21 +282,16 @@ public class PostDAOImpl implements PostDAO {
             int rows = statement.executeUpdate();
 
             if (rows > 0) {
-
-                logger.info(
-                        "Post updated successfully: post_id={}, username={}",
-                        post.getPost_id(),
-                        post.getUser().getUsername()
-                );
-
                 return true;
             }
 
+            /*
             logger.warn(
                     "No post updated: post_id={}, username={}",
                     post.getPost_id(),
                     post.getUser().getUsername()
             );
+            */
 
         } catch (Exception e) {
 
@@ -331,21 +327,16 @@ public class PostDAOImpl implements PostDAO {
             int rows = statement.executeUpdate();
 
             if (rows > 0) {
-
-                logger.info(
-                        "Post deleted successfully: post_id={}, username={}",
-                        post_id,
-                        username
-                );
-
                 return true;
             }
 
+            /*
             logger.warn(
                     "No post deleted: post_id={}, username={}",
                     post_id,
                     username
             );
+            */
 
         } catch (Exception e) {
 
